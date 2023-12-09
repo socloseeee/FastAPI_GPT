@@ -1,2 +1,5 @@
 # Project exclude paths
 /backend/venv/
+/backend/.env
+/backend/conf.ini
+/frontend/.env
