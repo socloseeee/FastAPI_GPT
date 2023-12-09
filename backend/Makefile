@@ -1,28 +1,41 @@
 .PHONY: install migrate
 
+# Подключаем файл .env
+include .env
+
 venv:
-	# Создание и активация виртуальной среды
-	python -m venv venv
-	venv\Scripts\activate
-
-install: venv
-	# Установка зависимостей из requirements.txt
-	pip install -r requirements.txt
-
-migrate:
-	# Создание пользователя PostgreSQL и базы данных
-	# В Linux используется sudo, а в Windows - Runas с правами администратора
-	# Вместо sudo можно использовать runas на Windows, но потребуется ввод пароля администратора
-	# Однако, это может не сработать в некоторых случаях.
+	# Создание виртуальной среды
 ifeq ($(OS),Windows_NT)
-	# Команды для Windows PowerShell
-	# Обратите внимание, что некоторые команды могут потребовать прав администратора
-	psql -U postgres -c "CREATE USER postgres WITH PASSWORD 'postgres';"
-	psql -U postgres -c "CREATE DATABASE GPT_APP OWNER postgres;"
+	# Команды для Windows
+	python -m venv venv
 else
 	# Команды для Linux
-	sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'postgres';"
-	sudo -u postgres psql -c "CREATE DATABASE GPT_APP OWNER postgres;"
+	python3 -m venv venv
 endif
+
+activate_venv:
+ifeq ($(OS),Windows_NT)
+	# Активация виртуальной среды на Windows
+	venv\Scripts\activate && pip install -r requirements.txt
+else
+	# Активация виртуальной среды на Linux
+	. venv/bin/activate && pip install -r requirements.txt
+endif
+
+install: venv activate_venv
+
+create_database:
+	# Создание пользователя PostgreSQL и базы данных
+ifeq ($(OS),Windows_NT)
+	# Команды для Windows
+	psql -U $(DB_USER) -c "CREATE USER $(DB_USER) WITH PASSWORD '$(DB_PASS)';"
+	psql -U $(DB_USER) -c "CREATE DATABASE $(DB_NAME) OWNER $(DB_USER);"
+else
+	# Команды для Linux
+	sudo -u postgres psql -c "CREATE USER $(DB_USER) WITH PASSWORD '$(DB_PASS)';"
+	sudo -u postgres psql -c "CREATE DATABASE $(DB_NAME) OWNER $(DB_USER);"
+endif
+
+migrate: create_database
 	# Выполнение миграции с использованием Alembic
 	alembic upgrade head
