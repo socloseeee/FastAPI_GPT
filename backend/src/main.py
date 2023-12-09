@@ -133,8 +133,7 @@ async def get_GPT_response(
             model=g4f.models.default,
             messages=messages,
             provider=g4f.Provider.GeekGpt,
-            stream=False,
-            timeout=3,
+            stream=False
         )
         print(response)
 
