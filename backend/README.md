@@ -26,10 +26,8 @@ pip install -r requirements.txt
 3) Проинициировать миграции
 ```commandline
 alembic init migrations
-alembic revision -m
- "initial"  
-alembic revision --
-autogenerate
+alembic revision -m "initial"  
+alembic revision --autogenerate
 alembic upgrade head
 ```
 
