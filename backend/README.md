@@ -30,7 +30,7 @@ alembic revision -m "initial"
 alembic revision --autogenerate
 alembic upgrade head
 ```
-4) Содержимое backend/migratiins/env.py файл заменить на:
+4) Содержимое backend/migrations/env.py файл заменить на:
 ```python
 from logging.config import fileConfig
 
