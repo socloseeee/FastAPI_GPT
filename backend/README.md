@@ -5,7 +5,7 @@
 Настрой подключение к БД postgresql в файле /backend/.env
 Также необходимо установить сам Postgresql(Если не установлен)
 
-## 2. Проект Windows
+## 2.1 Проект Windows
 Переходишь в директорию FastAPI_GPT/backend и копипастишь в cmd следующее:
 ```commandline
 python -m venv venv
@@ -26,14 +26,21 @@ cd src
 uvicorn main:app --reload
 ```
 
-## 2.1 Makefile(Linux)
-
+## 2.2 Проект Linux
+Переходишь в директорию FastAPI_GPT/backend и копипастишь в cmd следующее:
 ```commandline
-make install
-```
-
-```commandline
-make migrate
+python3 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+alembic init migrations
+alembic revision -m "initial"
+cp env.py migrations/env.py
+rm env.py
+alembic upgrade head
+alembic revision --autogenerate
+alembic upgrade head
+cd src
+uvicorn main:app --reload
 ```
 
 
