@@ -1,3 +1,7 @@
+# Swagger
+![image](https://github.com/socloseeee/FastAPI_GPT/assets/65871712/118b3c06-0b57-416a-95e7-4c84e7ee12a2)
+
+
 # Как настроить BACKEND?
 *инструкция любителей крабового салата*
 
